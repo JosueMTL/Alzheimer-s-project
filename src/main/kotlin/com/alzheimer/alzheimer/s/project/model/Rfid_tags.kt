@@ -12,22 +12,16 @@ class RFIDTag {
     var id: Long? = null
 
     @Column(name = "interaction_id")
-    var interactionId: Int? = null
+    var interactionId: Long? = null
 
     @Column(name = "users_id")
-    var usersId: Int? = null
+    var usersId: Long? = null
 
     @Column(name = "read_date")
     var readDate: Date? = null
 
     @Column(name = "location")
     var location: String? = null
-
-    @ManyToOne
-    @JoinColumn(name = "interaction_id", insertable = false, updatable = false)
-    var interaction: Interactions? = null
-
-    @ManyToOne
-    @JoinColumn(name = "users_id", insertable = false, updatable = false)
-    var user: Users? = null
 }
+
+
