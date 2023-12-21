@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS interactions (
 
 CREATE TABLE IF NOT EXISTS rfid_tags (
     id SERIAL PRIMARY KEY,
-    interaction_id INT,
+    interaction_id INT,ccccc
     users_id INT,
     read_date DATE,
     location VARCHAR(255),
