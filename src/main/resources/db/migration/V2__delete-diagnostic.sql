@@ -1,0 +1,2 @@
+-- ALTER TABLE patienteInfo
+-- DROP COLUMN date_diagnosis;
