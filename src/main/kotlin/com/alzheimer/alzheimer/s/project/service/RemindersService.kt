@@ -1,34 +1,77 @@
+package com.alzheimer.alzheimer.s.project.service
+
 import com.alzheimer.alzheimer.s.project.model.Reminders
 import com.alzheimer.alzheimer.s.project.repository.RemindersRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Example
+import org.springframework.data.domain.ExampleMatcher
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class RemindersService {
-
     @Autowired
-    private lateinit var remindersRepository: RemindersRepository
+    lateinit var remindersRepository: RemindersRepository
 
-
-    fun saveReminder(reminder: Reminders) {
-        remindersRepository.save(reminder)
+    fun list (pageable: Pageable, reminders: Reminders): Page<Reminders> {
+        val matcher = ExampleMatcher.matching()
+            .withIgnoreNullValues()
+            .withMatcher(("fullname"), ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+        return remindersRepository.findAll(Example.of(reminders, matcher), pageable)
     }
 
-    fun getReminderById(id: Long): Reminders? {
-        return remindersRepository.findById(id).orElse(null)
+    fun save(reminders: Reminders): Reminders{
+        try{
+            return remindersRepository.save(reminders)
+        }
+        catch (ex:Exception){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
+        }
     }
 
-    fun getAllReminders(): List<Reminders> {
-        return remindersRepository.findAll()
+    fun update(reminders: Reminders): Reminders{
+        try {
+            remindersRepository.findById(reminders.id)
+                ?: throw Exception("ID no existe")
+
+            return remindersRepository.save(reminders)
+        }
+        catch (ex:Exception){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
+        }
     }
 
-    fun updateReminder(reminder: Reminders) {
-        // Implementa la lógica para actualizar el recordatorio
-        remindersRepository.save(reminder)
+    fun updateName(reminders:Reminders): Reminders{
+        try{
+            val response = remindersRepository.findById(reminders.id)
+                ?: throw Exception("ID no existe")
+            response.apply {
+                title=reminders.title
+            }
+            return remindersRepository.save(response)
+        }
+        catch (ex:Exception){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
+        }
     }
 
-    fun deleteReminder(id: Long) {
-        remindersRepository.deleteById(id)
+    fun listById (id:Long?):Reminders?{
+        return remindersRepository.findById(id)
     }
+
+    fun delete (id: Long?):Boolean?{
+        try{
+            val response = remindersRepository.findById(id)
+                ?: throw Exception("ID no existe")
+            remindersRepository.deleteById(id!!)
+            return true
+        }
+        catch (ex:Exception){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
+        }
+    }
+
 }

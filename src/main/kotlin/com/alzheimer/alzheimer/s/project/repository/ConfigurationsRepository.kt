@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ConfigurationsRepository:JpaRepository<Configurations, Long?> {
-fun findById (id: Long?): Users?
+fun findById (id: Long?): Configurations?
 }
