@@ -9,21 +9,20 @@ import jakarta.persistence.Table
 import java.sql.Timestamp
 
 @Entity
-@Table(name = "interactions")
-class Interactions {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "card")
+class Card {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     var id: Long? = null
 
-    var message: String? = null
+    @Column(name = "date_time")
+    var dateTime: Timestamp? = null
 
-    var response: String? = null
+    var location: String? = null
 
-    @Column(name = "date_time_interaction")
-    var dateTimeInteractions: Timestamp? = null
-
-    var request: Boolean? = null
+    @Column(name = "interactions_id")
+    var interactionsId: Long? = null
 
     @Column(name = "patient_id")
     var patientId: Long? = null

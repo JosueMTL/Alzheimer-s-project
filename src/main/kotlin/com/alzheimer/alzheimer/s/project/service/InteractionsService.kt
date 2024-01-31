@@ -49,7 +49,7 @@ class InteractionsService {
             val response = interactionsRepository.findById(interactions.id)
                 ?: throw Exception("ID no existe")
             response.apply {
-                usersMessage=interactions.usersMessage
+                message=interactions.message
             }
             return interactionsRepository.save(response)
         }

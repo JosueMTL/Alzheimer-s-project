@@ -1,57 +1,99 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS caregivers (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    gmail VARCHAR(255),
-    password VARCHAR(255)
+    name VARCHAR(50),
+    last_name VARCHAR(50),
+    user_name VARCHAR(50),
+    gmail VARCHAR(70),
+    password VARCHAR(50),
+    relationship VARCHAR(55)
     );
 
-CREATE TABLE IF NOT EXISTS configurations (
+CREATE TABLE IF NOT EXISTS alarm (
     id SERIAL PRIMARY KEY,
-    users_id INT,
-    volume INT,
-    alert_tones VARCHAR(255),
-    FOREIGN KEY (users_id) REFERENCES users(id)
-    );
-
-CREATE TABLE IF NOT EXISTS patienteInfo (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    address VARCHAR(255),
-    date_birth DATE,
-    date_diagnosis DATE,
-    stage INT
-    );
-
-CREATE TABLE IF NOT EXISTS reminders (
-    id SERIAL PRIMARY KEY,
-    users_id INT,
-    patientInfo_id INT,
-    title VARCHAR(255),
-    description TEXT,
-    date DATE,
+    title VARCHAR(75),
     time TIME,
-    status VARCHAR (500),
-    active BOOLEAN,
-    FOREIGN KEY (users_id) REFERENCES users(id),
-    FOREIGN KEY (patientInfo_id) REFERENCES patienteInfo(id)
+    repeat BOOLEAN,
+    date DATE,
+    caregivers_id INT,
+    FOREIGN KEY (caregivers_id) REFERENCES caregivers(id)
+    );
+
+CREATE TABLE IF NOT EXISTS patient (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(55),
+    last_name VARCHAR (55),
+    age INTEGER,
+    date_diagnosis DATE,
+    address VARCHAR(55),
+    stage VARCHAR(55),
+    alarm_id INT,
+    FOREIGN KEY (alarm_id) REFERENCES alarm(id)
     );
 
 CREATE TABLE IF NOT EXISTS interactions (
     id SERIAL PRIMARY KEY,
-    patienteInfo_id INT,
-    users_message VARCHAR (200),
-    assistant_response VARCHAR (200),
+    message VARCHAR (200),
+    response VARCHAR (100),
     date_time_interaction TIMESTAMP,
     request BOOLEAN,
-    FOREIGN KEY (patienteInfo_id) REFERENCES patienteInfo(id)
+    patient_id INT,
+    FOREIGN KEY (patient_id) REFERENCES patient(id)
     );
 
-CREATE TABLE IF NOT EXISTS rfid_tags (
+CREATE TABLE IF NOT EXISTS card (
     id SERIAL PRIMARY KEY,
-    interaction_id INT,
-    users_id INT,
-    read_date DATE,
-    location VARCHAR(255),
-    FOREIGN KEY (interaction_id) REFERENCES interactions(id),
-    FOREIGN KEY (users_id) REFERENCES users(id)
+    date_time TIMESTAMP,
+    location VARCHAR(55),
+    interactions_id INT,
+    patient_id INT,
+    FOREIGN KEY (interactions_id) REFERENCES interactions(id),
+    FOREIGN KEY (patient_id) REFERENCES patient(id)
+    );
+
+CREATE TABLE IF NOT EXISTS reminders (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50),
+    description VARCHAR(75),
+    date DATE,
+    time TIME,
+    status VARCHAR (75),
+    repeat BOOLEAN,
+    patiente VARCHAR(75),
+    caregivers_id INT,
+    patient_id INT,
+    FOREIGN KEY (caregivers_id) REFERENCES caregivers(id),
+    FOREIGN KEY (patient_id) REFERENCES patient(id)
+    );
+
+CREATE TABLE IF NOT EXISTS configurations (
+    id SERIAL PRIMARY KEY,
+    volume INT,
+    alert_tones VARCHAR(55),
+    caregivers_id INT,
+    FOREIGN KEY (caregivers_id) REFERENCES caregivers(id)
+    );
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(80) NOT NULL,
+    email VARCHAR(60) NOT NULL,
+    locked BOOLEAN NOT NULL,
+    disabled BOOLEAN NOT NULL,
+    UNIQUE (username),
+    UNIQUE (email),
+    PRIMARY KEY (id),
+    caregivers_id INT,
+    patient_id INT,
+    FOREIGN KEY (caregivers_id) REFERENCES caregivers(id),
+    FOREIGN KEY (patient_id) REFERENCES patient(id)
+    );
+
+CREATE TABLE IF NOT EXISTS role (
+    id SERIAL,
+    role VARCHAR(25) NOT NULL,
+    user_id INTEGER NOT NULL,
+    UNIQUE (role, user_id),
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
     );

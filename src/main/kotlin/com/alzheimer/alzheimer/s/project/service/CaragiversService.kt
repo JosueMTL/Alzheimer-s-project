@@ -1,7 +1,7 @@
 package com.alzheimer.alzheimer.s.project.service
 
-import com.alzheimer.alzheimer.s.project.model.Users
-import com.alzheimer.alzheimer.s.project.repository.UsersRepository
+import com.alzheimer.alzheimer.s.project.model.Caregivers
+import com.alzheimer.alzheimer.s.project.repository.CaragiversRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
@@ -12,61 +12,61 @@ import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
 @Service
-class UsersService {
+class CaragiversService {
     @Autowired
-    lateinit var usersRepository: UsersRepository
+    lateinit var caragiversRepository: CaragiversRepository
 
-    fun list (pageable: Pageable, users: Users): Page<Users> {
+    fun list (pageable: Pageable, users: Caregivers): Page<Caregivers> {
         val matcher = ExampleMatcher.matching()
             .withIgnoreNullValues()
             .withMatcher(("fullname"), ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-        return usersRepository.findAll(Example.of(users, matcher), pageable)
+        return caragiversRepository.findAll(Example.of(users, matcher), pageable)
     }
 
-    fun save(users: Users): Users{
+    fun save(caregivers: Caregivers): Caregivers{
         try{
-            return usersRepository.save(users)
+            return caragiversRepository.save(caregivers)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun update(users: Users): Users{
+    fun update(caregivers: Caregivers): Caregivers{
         try {
-            usersRepository.findById(users.id)
+            caragiversRepository.findById(caregivers.id)
                 ?: throw Exception("ID no existe")
 
-            return usersRepository.save(users)
+            return caragiversRepository.save(caregivers)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun updateName(users:Users): Users{
+    fun updateName(caregivers:Caregivers): Caregivers{
         try{
-            val response = usersRepository.findById(users.id)
+            val response = caragiversRepository.findById(caregivers.id)
                 ?: throw Exception("ID no existe")
             response.apply {
-                password=users.password
+                password=caregivers.password
             }
-            return usersRepository.save(response)
+            return caragiversRepository.save(response)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun listById (id:Long?):Users?{
-        return usersRepository.findById(id)
+    fun listById (id:Long?):Caregivers?{
+        return caragiversRepository.findById(id)
     }
 
     fun delete (id: Long?):Boolean?{
         try{
-            val response = usersRepository.findById(id)
+            val response = caragiversRepository.findById(id)
                 ?: throw Exception("ID no existe")
-            usersRepository.deleteById(id!!)
+            caragiversRepository.deleteById(id!!)
             return true
         }
         catch (ex:Exception){
