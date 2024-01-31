@@ -28,8 +28,10 @@ class SecurityConfig {
             .authorizeHttpRequests { authRequest ->
                 authRequest
                     .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/client/**").hasAnyRole("admin","ventas")
-                    .requestMatchers(HttpMethod.GET,"/product/**").hasAnyRole("admin")
+                    .requestMatchers("/Caregivers/**")
+                    .hasAnyRole("admin")
+                    .requestMatchers(HttpMethod.GET,"/Configurations/**")
+                    .hasAnyRole("carer")
 
                     .anyRequest().denyAll()
             }
