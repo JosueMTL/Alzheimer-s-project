@@ -1,7 +1,7 @@
 package com.alzheimer.alzheimer.s.project.service
 
-import com.alzheimer.alzheimer.s.project.model.Rfid_tags
-import com.alzheimer.alzheimer.s.project.repository.Rfid_tagsRepository
+import com.alzheimer.alzheimer.s.project.model.Card
+import com.alzheimer.alzheimer.s.project.repository.CardRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
@@ -12,61 +12,61 @@ import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
 @Service
-class Rfid_tagsService {
+class CardService {
     @Autowired
-    lateinit var rfid_tagsRepository: Rfid_tagsRepository
+    lateinit var cardRepository: CardRepository
 
-    fun list (pageable: Pageable, rfid_tags: Rfid_tags): Page<Rfid_tags> {
+    fun list (pageable: Pageable, card: Card): Page<Card> {
         val matcher = ExampleMatcher.matching()
             .withIgnoreNullValues()
             .withMatcher(("fullname"), ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-        return rfid_tagsRepository.findAll(Example.of(rfid_tags, matcher), pageable)
+        return cardRepository.findAll(Example.of(card, matcher), pageable)
     }
 
-    fun save(rfid_tags: Rfid_tags): Rfid_tags{
+    fun save(card: Card): Card{
         try{
-            return rfid_tagsRepository.save(rfid_tags)
+            return cardRepository.save(card)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun update(rfid_tags: Rfid_tags): Rfid_tags{
+    fun update(card: Card): Card{
         try {
-            rfid_tagsRepository.findById(rfid_tags.id)
+            cardRepository.findById(card.id)
                 ?: throw Exception("ID no existe")
 
-            return rfid_tagsRepository.save(rfid_tags)
+            return cardRepository.save(card)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun updateName(rfid_tags:Rfid_tags): Rfid_tags{
+    fun updateName(card:Card): Card{
         try{
-            val response = rfid_tagsRepository.findById(rfid_tags.id)
+            val response = cardRepository.findById(card.id)
                 ?: throw Exception("ID no existe")
             response.apply {
-                location=rfid_tags.location
+                location=card.location
             }
-            return rfid_tagsRepository.save(response)
+            return cardRepository.save(response)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
 
-    fun listById (id:Long?):Rfid_tags?{
-        return rfid_tagsRepository.findById(id)
+    fun listById (id:Long?):Card?{
+        return cardRepository.findById(id)
     }
 
     fun delete (id: Long?):Boolean?{
         try{
-            val response = rfid_tagsRepository.findById(id)
+            val response = cardRepository.findById(id)
                 ?: throw Exception("ID no existe")
-            rfid_tagsRepository.deleteById(id!!)
+            cardRepository.deleteById(id!!)
             return true
         }
         catch (ex:Exception){

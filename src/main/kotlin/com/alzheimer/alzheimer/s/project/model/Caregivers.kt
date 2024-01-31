@@ -8,19 +8,24 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "users")
-class Users {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "caregivers")
+class Caregivers {
     @Id
-    @Column(updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null
 
-    @Column(name = "name")
     var name: String? = null
 
-    @Column(name = "gmail")
+    @Column(name = "last_name")
+    var lastName: String? = null
+
+    @Column(name = "user_name")
+    var userName: String? =null
+
     var gmail: String? = null
 
-    @Column(name = "password")
     var password: String? = null
+
+    var relationship: String? =null
 }

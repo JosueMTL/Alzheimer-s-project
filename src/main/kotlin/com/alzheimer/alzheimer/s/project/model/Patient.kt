@@ -9,22 +9,25 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "rfid_tags")
-class Rfid_tags {
+@Table(name = "patient")
+class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id")
     var id: Long? = null
 
-    @Column(name = "interaction_id")
-    var interactionId: Long? = null
+    var name: String? = null
 
-    @Column(name = "users_id")
-    var usersId: Long? = null
+    @Column(name = "last_name")
+    var lastName: Int? = null
 
-    @Column(name = "read_date")
-    var readDate: Date? = null
+    @Column(name = "date_diagnosis")
+    var dateDiagnosis: Date? = null
 
-    @Column(name = "location")
-    var location: String? = null
+    var address: String? = null
+
+    var stage: String? = null
+
+    @Column(name = "alarm_id")
+    var alarmId: Long? = null
 }
